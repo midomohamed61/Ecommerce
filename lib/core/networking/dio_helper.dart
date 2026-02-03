@@ -40,7 +40,7 @@ class DioHelper {
 
       return response;
     } catch (e) {
-      log(e.toString());
+      rethrow;
     }
   }
 
