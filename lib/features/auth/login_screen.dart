@@ -2,6 +2,7 @@ import 'package:ecommerce_app/core/routing/app_routes.dart';
 import 'package:ecommerce_app/core/styling/app_colors.dart';
 import 'package:ecommerce_app/core/styling/app_styles.dart';
 import 'package:ecommerce_app/core/widgets/custom_text_field.dart';
+import 'package:ecommerce_app/core/widgets/loading_widget.dart';
 import 'package:ecommerce_app/core/widgets/primay_button_widget.dart';
 import 'package:ecommerce_app/core/widgets/spacing_widgets.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +21,8 @@ class _LoginScreenState extends State<LoginScreen> {
   late TextEditingController username;
   late TextEditingController password;
 
+  bool isLoading = true;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -34,7 +37,7 @@ class _LoginScreenState extends State<LoginScreen> {
       child: Scaffold(
         body: Padding(
           padding: EdgeInsets.symmetric(horizontal: 22.w),
-          child: Form(
+          child: isLoading ? const LoadingWidget() : Form(
             key: formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
