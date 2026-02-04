@@ -2,6 +2,8 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:ecommerce_app/core/networking/api_endpoints.dart';
 import 'package:ecommerce_app/core/networking/dio_helper.dart';
+import 'package:ecommerce_app/core/utils/secure_storage.dart';
+import 'package:ecommerce_app/core/utils/sl.dart';
 import 'package:ecommerce_app/features/auth/models/login_response_model.dart';
 
 class AuthRepo {
@@ -20,7 +22,13 @@ class AuthRepo {
    );
    if (response.statusCode == 200 || response.statusCode == 201) {
      LoginResponseModel loginResponseModel = LoginResponseModel.fromJson(response.data);
-     return right(loginResponseModel);
+      if (loginResponseModel.token != null) {
+        await sl<SecureStorage>().saveToken(token: loginResponseModel.token!);
+        return right(loginResponseModel);
+      }
+      else{
+        return left("Token is null");
+      }
      
    }
    else{

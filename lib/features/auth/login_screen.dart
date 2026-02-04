@@ -3,6 +3,7 @@ import 'package:ecommerce_app/core/routing/app_routes.dart';
 import 'package:ecommerce_app/core/styling/app_colors.dart';
 import 'package:ecommerce_app/core/styling/app_styles.dart';
 import 'package:ecommerce_app/core/utils/animated_snake_dialog.dart';
+import 'package:ecommerce_app/core/utils/secure_storage.dart';
 import 'package:ecommerce_app/core/widgets/custom_text_field.dart';
 import 'package:ecommerce_app/core/widgets/loading_widget.dart';
 import 'package:ecommerce_app/core/widgets/primay_button_widget.dart';
@@ -12,6 +13,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ecommerce_app/features/auth/cubit/cubit/auth_cubit.dart';
+import 'package:ecommerce_app/core/utils/sl.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -33,8 +35,21 @@ class _LoginScreenState extends State<LoginScreen> {
     super.initState();
     username = TextEditingController();
     password = TextEditingController();
-  }
 
+    sl<SecureStorage>().getToken().then((value) {
+      if(value != null && value.isNotEmpty){
+        context.pushNamed(AppRoutes.mainScreen);
+      }
+    });
+  }
+ @override
+  void dispose() {
+    // TODO: implement dispose
+    username.dispose();
+    password.dispose();
+    
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -46,6 +61,7 @@ class _LoginScreenState extends State<LoginScreen> {
             }
             if (state is AuthSuccess) {
               showAnimatedSnakeDialog(context, message: state.message , type: AnimatedSnackBarType.success);
+              context.pushNamed(AppRoutes.mainScreen);
             }
           },
           builder: (context, state) {
